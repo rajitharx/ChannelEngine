@@ -1,4 +1,5 @@
 ﻿using ChannelEngine.ServiceManager.Interface;
+using ChannelEngine.Shared.Entity;
 using Microsoft.Extensions.Configuration;
 
 namespace ChannelEngine.ServiceManager
@@ -6,19 +7,20 @@ namespace ChannelEngine.ServiceManager
     public class OrderAPI : IOrderAPI
     {
         private readonly IConfiguration _configuration;
-
-
+        private string apiKey = string.Empty;
         HttpClient client = new HttpClient();
 
         public OrderAPI(IConfiguration configuration)
         {
             _configuration = configuration;
+            apiKey = _configuration["AppSetting:APIKey"];
         }
 
-        public int GetOrderByID(int id)
+        public IList<MerchantOrderResponse> GetOrderByStatusInProgress()
         {
-            GetOrderByParameter(ConstructOrderStatusRequest("IN_PROGRESS"));
-            return id + 11;
+            IList<MerchantOrderResponse> merchantOrderResponses = 
+                GetOrderByParameter(ConstructOrderStatusRequest("IN_PROGRESS"), apiKey).GetAwaiter().GetResult(); ;
+            return merchantOrderResponses;
         }
 
         private string ConstructOrderStatusRequest(string status)
@@ -26,10 +28,10 @@ namespace ChannelEngine.ServiceManager
             return $"statuses={status}";
         }
 
-        private async void GetOrderByParameter(string parameter)
+        private async Task<IList<MerchantOrderResponse>> GetOrderByParameter(string parameter, string apiKey)
         {
-            string apiKey = _configuration["AppSetting:APIKey"];
-            string path = $"https://demo.channelengine.net/api/v2/orders?statuses=IN_PROGRESS&apikey=541b989ef78ccb1bad630ea5b85c6ebff9ca3322";
+            IList<MerchantOrderResponse> merchantOrderResponses = new List<MerchantOrderResponse>(); 
+            string path = $"https://demo.channelengine.net/api/v2/orders?statuses=IN_PROGRESS&apikey={apiKey}";
 
 
             try
@@ -46,9 +48,7 @@ namespace ChannelEngine.ServiceManager
                 throw;
             }
 
-            // Deserialize the updated product from the response body.
-           // product = await response.Content.ReadAsAsync<Product>();
-           // return product;
+            return merchantOrderResponses;
         }
     }
 }

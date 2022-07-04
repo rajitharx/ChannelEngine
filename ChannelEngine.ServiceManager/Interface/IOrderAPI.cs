@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChannelEngine.Shared.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace ChannelEngine.ServiceManager.Interface
 {
     public interface IOrderAPI
     {
-        int GetOrderByID(int id);
+        IList<MerchantOrderResponse> GetOrderByStatusInProgress();
     }
 }
