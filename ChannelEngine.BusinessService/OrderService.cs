@@ -2,6 +2,7 @@
 using ChannelEngine.ServiceManager.Interface;
 using ChannelEngine.Shared.Entity;
 using ChannelEngine.Shared.Enumerations;
+using System.Linq;
 
 namespace ChannelEngine.BusinessService
 {
@@ -12,42 +13,74 @@ namespace ChannelEngine.BusinessService
         /// </summary>
         private readonly IOrderAPI _orderAPI;
 
+        private readonly IProductService _productService;
+
         /// <summary>
         /// OrderService constructor
         /// </summary>
         /// <param name="orderAPI">IOrderAPI interface</param>
-        public OrderService(IOrderAPI orderAPI)
+        public OrderService(IOrderAPI orderAPI, IProductService productService)
         {
             _orderAPI = orderAPI;
+            _productService = productService;
         }
 
-        public IList<MerchantOrderResponse> GetAllOrdersByStatus(OrderStatusEnum orderStatusEnum)
+        public Response<IList<MerchantOrderResponse>> GetAllOrdersByStatus(OrderStatusEnum orderStatusEnum)
         {
+            Response<IList<MerchantOrderResponse>> merchantOrderResponses = new();
             switch (orderStatusEnum)
             {
                 case OrderStatusEnum.IN_PROGRESS:
                     {
-                        // your code 
-                        // for plus operator
+                        merchantOrderResponses = GetAllOrdersByStatusFromAPI(orderStatusEnum);
                         break;
                     }
                 default: break;
             }
-            throw new NotImplementedException();
+            return merchantOrderResponses;
         }
 
-        private IList<MerchantOrderResponse> GetAllOrdersByStatusFromAPI(OrderStatusEnum orderStatusEnum)
+        private Response<IList<MerchantOrderResponse>> GetAllOrdersByStatusFromAPI(OrderStatusEnum orderStatusEnum)
         {
-            string? statusStr = Enum.GetName(typeof(OrderStatusEnum), orderStatusEnum);
-
-            IList<MerchantOrderResponse> merchantOrderResponses =
+            Response<IList<MerchantOrderResponse>> merchantOrderResponses =
                 _orderAPI.GetOrderByStatusInProgress();
-            throw new NotImplementedException();
+            IList<MerchantOrderLineResponse> res = new List<MerchantOrderLineResponse>();
+
+            foreach (MerchantOrderResponse merchantOrderResponse in merchantOrderResponses.Content)
+            {
+                foreach (MerchantOrderLineResponse merchantOrderLineResponse in merchantOrderResponse.Lines)
+                {
+                    res.Add(merchantOrderLineResponse);
+                }
+            }
+
+            GetTopSoldProductsByStatus(res);
+
+            return merchantOrderResponses;
         }
 
-        public void GetTopSoldProductsByStatus(string status, int productCount)
+        public void GetTopSoldProductsByStatus(IList<MerchantOrderLineResponse> merchantOrderLineResponses)
         {
-            throw new NotImplementedException();
+            string stringVal = string.Empty;
+            foreach (MerchantOrderLineResponse values in merchantOrderLineResponses)
+            {
+                stringVal += string.Format("{0}, {1}, {2}, {3}"
+                    , values.MerchantProductNo
+                    , values.Gtin
+                    , values.JurisName
+                    , values.Quantity) + "\n";
+            }
+            stringVal += "----------------------------------------" + "\n";
+            merchantOrderLineResponses = merchantOrderLineResponses.OrderByDescending(x => x.Quantity).ToList();
+
+            foreach (MerchantOrderLineResponse values in merchantOrderLineResponses)
+            {
+                stringVal += string.Format("{0}, {1}, {2}, {3}"
+                    , values.MerchantProductNo
+                    , values.Gtin
+                    , values.JurisName
+                    , values.Quantity) + "\n";
+            }
         }
 
         public void UpdateProductStock(int merchantProductNo, int stockCount)

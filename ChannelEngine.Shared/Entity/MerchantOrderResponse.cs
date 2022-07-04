@@ -29,7 +29,7 @@
         public decimal OriginalShippingCostsVat { get; set; }
         public decimal OriginalTotalInclVat { get; set; }
         public decimal OriginalTotalVat { get; set; }
-        public MerchantOrderLineResponse Lines { get; set; }
+        public List<MerchantOrderLineResponse>? Lines { get; set; }
         public decimal ShippingCostsInclVat { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
@@ -40,7 +40,7 @@
         public string CurrencyCode { get; set; }
         public string OrderDate { get; set; }
         public string ChannelCustomerNo { get; set; }
-        public string ExtraData { get; set; }
+        public object ExtraData { get; set; }
 
     }
 }

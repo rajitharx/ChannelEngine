@@ -6,6 +6,8 @@ using ChannelEngine.BusinessService;
 using ChannelEngine.BusinessService.Interface;
 using ChannelEngine.ServiceManager;
 using ChannelEngine.ServiceManager.Interface;
+using ChannelEngine.Shared.Entity;
+using ChannelEngine.Shared.Enumerations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting; 
@@ -16,12 +18,13 @@ class Program
     static void Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
-        //int value = host.Services.GetService<IOrderService>().GetOrderByID(123);
-
-        //var test = SetupDI();
-
         var orderService = host.Services.GetService<IOrderService>();
-        int value = orderService.GetOrderByID(123);
+        orderService.GetAllOrdersByStatus(OrderStatusEnum.IN_PROGRESS);
+
+
+        CollectionOfMerchantOrderResponse response = new CollectionOfMerchantOrderResponse();
+
+        Console.ReadLine();
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args)
@@ -35,7 +38,9 @@ class Program
             {
                 services.AddSingleton<IOrderService, OrderService>()
                 .AddSingleton<IOrderService, OrderService>()
-                .AddSingleton<IOrderAPI, OrderAPI>();
+                .AddSingleton<IProductService, ProductService>()
+                .AddSingleton<IOrderAPI, OrderAPI>()
+                .AddSingleton<IProductAPI, ProductAPI>();
 
             })
             .ConfigureAppConfiguration(app =>
