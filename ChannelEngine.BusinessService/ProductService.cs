@@ -1,18 +1,20 @@
 ﻿using ChannelEngine.BusinessService.Interface;
 using ChannelEngine.ServiceManager.Interface;
 using ChannelEngine.Shared.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChannelEngine.BusinessService
 {
     public class ProductService : IProductService
     {
+        /// <summary>
+        /// Interface for ProductAPI
+        /// </summary>
         private readonly IProductAPI _productAPI;
 
+        /// <summary>
+        /// ProductService Constructor
+        /// </summary>
+        /// <param name="productAPI"></param>
         public ProductService(IProductAPI productAPI)
         {
             _productAPI = productAPI;

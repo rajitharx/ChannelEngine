@@ -18,8 +18,8 @@ class Program
     static void Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
-        var orderService = host.Services.GetService<IOrderService>();
-        orderService.GetAllOrdersByStatus(OrderStatusEnum.IN_PROGRESS);
+        var orderService = host.Services.GetService<IInProgressService>();
+        orderService.GetInProgressForTop5SellingProducts();
 
 
         CollectionOfMerchantOrderResponse response = new CollectionOfMerchantOrderResponse();
@@ -40,6 +40,7 @@ class Program
                 .AddSingleton<IOrderService, OrderService>()
                 .AddSingleton<IProductService, ProductService>()
                 .AddSingleton<IOrderAPI, OrderAPI>()
+                .AddSingleton<IInProgressService, InProgressService>()
                 .AddSingleton<IProductAPI, ProductAPI>();
 
             })

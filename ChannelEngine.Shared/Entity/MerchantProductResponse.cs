@@ -19,11 +19,11 @@ namespace ChannelEngine.Shared.Entity
         public string ManufacturerProductNumber { get; set; }
         public string MerchantProductNo { get; set; }
         public int Stock { get; set; }
-        public decimal Price { get; set; }
-        public decimal MSRP { get; set; }
-        public decimal PurchasePrice { get; set; }
+        public decimal? Price { get; set; }
+        public decimal? MSRP { get; set; }
+        public decimal? PurchasePrice { get; set; }
         public string VatRateType { get; set; }
-        public decimal ShippingCost { get; set; }
+        public decimal? ShippingCost { get; set; }
         public string ShippingTime { get; set; }
         public string Url { get; set; }
         public string ImageUrl { get; set; }

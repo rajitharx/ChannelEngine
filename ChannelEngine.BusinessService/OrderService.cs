@@ -42,21 +42,8 @@ namespace ChannelEngine.BusinessService
 
         private Response<IList<MerchantOrderResponse>> GetAllOrdersByStatusFromAPI(OrderStatusEnum orderStatusEnum)
         {
-            Response<IList<MerchantOrderResponse>> merchantOrderResponses =
-                _orderAPI.GetOrderByStatusInProgress();
-            IList<MerchantOrderLineResponse> res = new List<MerchantOrderLineResponse>();
-
-            foreach (MerchantOrderResponse merchantOrderResponse in merchantOrderResponses.Content)
-            {
-                foreach (MerchantOrderLineResponse merchantOrderLineResponse in merchantOrderResponse.Lines)
-                {
-                    res.Add(merchantOrderLineResponse);
-                }
-            }
-
-            GetTopSoldProductsByStatus(res);
-
-            return merchantOrderResponses;
+            return _orderAPI.GetOrderByStatusInProgress();
+           
         }
 
         //// TODO: add separate call to do the business login. 
