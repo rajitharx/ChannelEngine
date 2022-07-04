@@ -12,9 +12,15 @@ namespace ChannelEngine.BusinessService
     public class ProductService : IProductService
     {
         private readonly IProductAPI _productAPI;
-        public Response<MerchantProductResponse> GetProductDetailsBy(string serach)
+
+        public ProductService(IProductAPI productAPI)
         {
-            throw new NotImplementedException();
+            _productAPI = productAPI;
+        }
+
+        public Response<IList<MerchantProductResponse>> GetProductDetailsBySearchKey(string searchKey)
+        {
+            return _productAPI.GetProductDetailsByFromAPI(searchKey);
         }
     }
 }

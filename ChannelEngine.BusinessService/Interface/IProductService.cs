@@ -4,6 +4,6 @@ namespace ChannelEngine.BusinessService.Interface
 {
     public interface IProductService
     {
-        Response<MerchantProductResponse> GetProductDetailsBy(string serach);
+        Response<IList<MerchantProductResponse>> GetProductDetailsBySearchKey(string searchKey);
     }
 }

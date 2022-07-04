@@ -16,7 +16,7 @@ namespace ChannelEngine.ServiceManager
         private string productAPIURL = string.Empty;
         public ProductAPI(IConfiguration configuration) : base(configuration)
         {
-            productAPIURL = string.Format("{0}{1}", apiURL, "orders");
+            productAPIURL = string.Format("{0}{1}", apiURL, "products");
         }
 
         public Response<IList<MerchantProductResponse>> GetProductDetailsByFromAPI(string serachKey)

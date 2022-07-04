@@ -59,6 +59,7 @@ namespace ChannelEngine.BusinessService
             return merchantOrderResponses;
         }
 
+        //// TODO: add separate call to do the business login. 
         public void GetTopSoldProductsByStatus(IList<MerchantOrderLineResponse> merchantOrderLineResponses)
         {
             string stringVal = string.Empty;
@@ -75,11 +76,8 @@ namespace ChannelEngine.BusinessService
 
             foreach (MerchantOrderLineResponse values in merchantOrderLineResponses)
             {
-                stringVal += string.Format("{0}, {1}, {2}, {3}"
-                    , values.MerchantProductNo
-                    , values.Gtin
-                    , values.JurisName
-                    , values.Quantity) + "\n";
+                Response<IList<MerchantProductResponse>> cval  = 
+                    _productService.GetProductDetailsBySearchKey(values.MerchantProductNo);
             }
         }
 
