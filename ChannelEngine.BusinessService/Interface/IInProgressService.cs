@@ -10,6 +10,6 @@ namespace ChannelEngine.BusinessService.Interface
     public interface IInProgressService
     {
 
-        InProgressOrders GetInProgressForTop5SellingProducts();
+        IList<InProgressOrders> GetInProgressForTop5SellingProducts();
     }
 }

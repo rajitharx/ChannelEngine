@@ -27,16 +27,29 @@ namespace ChannelEngine.BusinessService
             _productService = productService;
         }
 
-        public InProgressOrders GetInProgressForTop5SellingProducts()
+        /// <summary>
+        /// GetInProgressForTop5SellingProducts
+        /// </summary>
+        /// <returns>InProgressOrders object list</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public IList<InProgressOrders> GetInProgressForTop5SellingProducts()
         {
-            Response<IList<MerchantOrderResponse>> response =
+            Response<IList<MerchantOrderResponse>> listOfMerchantOrderResponse =
                 GetAllOrdersByStatus(OrderStatusEnum.IN_PROGRESS);
+
+            if (listOfMerchantOrderResponse == null) 
+                throw new ArgumentNullException(nameof(listOfMerchantOrderResponse));
+
             IList<MerchantOrderLineResponse> merchantOrderLineResponses =
-                GetTop5SellingProductFromMerchantOrderResponses(response.Content);
+                GetTop5SellingProductFromMerchantOrderResponses(listOfMerchantOrderResponse.Content);
+
+            if (merchantOrderLineResponses == null) 
+                throw new ArgumentNullException(nameof(merchantOrderLineResponses));
+
             IList<InProgressOrders> inProgressOrders = 
                 GetInProgressOrdersProductDetails(merchantOrderLineResponses);
 
-            throw new NotImplementedException();
+            return inProgressOrders ?? throw new ArgumentNullException(nameof(inProgressOrders));
         }
 
         /// <summary>
@@ -80,7 +93,8 @@ namespace ChannelEngine.BusinessService
                 {
                     Name = response.Content[0].Name,
                     GTIN = merchantOrderLineResponse.Gtin,
-                    Quantity = merchantOrderLineResponse.Quantity
+                    Quantity = merchantOrderLineResponse.Quantity,
+                    MerchantProductNo = merchantOrderLineResponse.MerchantProductNo,
                 };
 
                 inProgressOrders.Add(inProgressOrder);
@@ -107,6 +121,7 @@ namespace ChannelEngine.BusinessService
                 }
             }
 
+            //// Take top 5 products
             merchantOrderLineResponses = merchantOrderLineResponses
                 .OrderByDescending(x => x.Quantity).Take(5).ToList();
 
