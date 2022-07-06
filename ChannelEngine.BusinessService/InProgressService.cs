@@ -73,7 +73,7 @@ namespace ChannelEngine.BusinessService
 
             if (productCreationResult.StatusCode == 200)
             {
-                responseStr = string.Format("{0} updated successfully!", productCreationResult.Content.AcceptedCount);
+                responseStr = string.Format("{0} record(s) updated successfully!", productCreationResult.Content.AcceptedCount);
             }
             else
             {
