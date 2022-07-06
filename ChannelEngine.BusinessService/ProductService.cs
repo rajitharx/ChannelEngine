@@ -24,5 +24,10 @@ namespace ChannelEngine.BusinessService
         {
             return _productAPI.GetProductDetailsByFromAPI(searchKey);
         }
+
+        public ApiResponse<ProductCreationResult> UpsertProduct(IList<MerchantProductRequest> merchantProductRequests)
+        {
+            return _productAPI.UpsertProductUsing(merchantProductRequests);
+        }
     }
 }

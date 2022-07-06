@@ -11,5 +11,6 @@ namespace ChannelEngine.BusinessService.Interface
     {
 
         IList<InProgressOrders> GetInProgressForTop5SellingProducts();
+        string UpdateProduct(string merchantProductNo, int stock);
     }
 }

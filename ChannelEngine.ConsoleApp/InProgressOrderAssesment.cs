@@ -13,14 +13,25 @@ namespace ChannelEngine.ConsoleApp
         /// <param name="hosting"></param>
         public static void ExecuteAssesment(IHost hosting)
         {
-            IInProgressService orderService = hosting.Services.GetService<IInProgressService>();
-            IList<InProgressOrders> inProgressOrders = orderService.GetInProgressForTop5SellingProducts();
+            //// Initialize interface for InProgressService
+            IInProgressService inProgressService = hosting.Services.GetService<IInProgressService>();
+            IList<InProgressOrders> inProgressOrders = inProgressService.GetInProgressForTop5SellingProducts();
 
+            //// Display Order details
             foreach (InProgressOrders orders in inProgressOrders)
             {
-                Console.WriteLine(String.Format("GTIN: {0}, Name: {1}, Quantity: {2}", 
+                Console.WriteLine(String.Format("GTIN: {0}, Name: {1}, Quantity: {2}",
                     orders.GTIN, orders.Name, orders.Quantity));
             }
+
+            Console.WriteLine();
+            Console.WriteLine(string.Format("Selecting a number between 0-{0}", inProgressOrders.Count - 1));
+
+            //// randomly select record from the list.
+            Random rnd = new Random();
+            int numebr = rnd.Next(inProgressOrders.Count);
+
+            string response = inProgressService.UpdateProduct(inProgressOrders[numebr].MerchantProductNo, 25);
         }
     }
 }

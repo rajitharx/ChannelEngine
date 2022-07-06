@@ -2,11 +2,7 @@
 using ChannelEngine.Shared.Entity;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ChannelEngine.ServiceManager
 {
@@ -21,18 +17,41 @@ namespace ChannelEngine.ServiceManager
 
         public Response<IList<MerchantProductResponse>> GetProductDetailsByFromAPI(string serachKey)
         {
-            return GetProductBySearchKey(serachKey).GetAwaiter().GetResult(); ;
+            return GetProductBySearchKey(serachKey).GetAwaiter().GetResult();
+        }
+
+        public ApiResponse<ProductCreationResult> UpsertProductUsing(IList<MerchantProductRequest> merchantProductRequests)
+        {
+            return UpsertProduct(merchantProductRequests).GetAwaiter().GetResult();
+        }
+
+        private async Task<ApiResponse<ProductCreationResult>> UpsertProduct(IList<MerchantProductRequest> merchantProductRequests)
+        {
+            ApiResponse<ProductCreationResult> apiResponse = new ApiResponse<ProductCreationResult>();
+            var json = JsonConvert.SerializeObject(merchantProductRequests);
+            string url = productAPIURL + $"?apikey={apiKey}";
+
+            var response = await client.PostAsync(url, new StringContent(json, Encoding.UTF8, "application/json"));
+            response.EnsureSuccessStatusCode();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                apiResponse = JsonConvert.DeserializeObject<ApiResponse<ProductCreationResult>>(jsonString);
+            }
+
+            return apiResponse;
         }
 
         private async Task<Response<IList<MerchantProductResponse>>> GetProductBySearchKey(string searchKey)
         {
             Response<IList<MerchantProductResponse>> responseObject = new Response<IList<MerchantProductResponse>>();
 
-            string path = productAPIURL + $"?search={searchKey}&apikey={apiKey}";
+            string url = productAPIURL + $"?search={searchKey}&apikey={apiKey}";
 
             try
             {
-                HttpResponseMessage response = await client.GetAsync(path);
+                HttpResponseMessage response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
 
                 if (response.IsSuccessStatusCode)
@@ -41,9 +60,8 @@ namespace ChannelEngine.ServiceManager
                     responseObject = JsonConvert.DeserializeObject<Response<IList<MerchantProductResponse>>>(jsonString);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-
                 throw;
             }
 

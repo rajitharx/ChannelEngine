@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelEngine.ConsoleApp", "ChannelEngine.ConsoleApp\ChannelEngine.ConsoleApp.csproj", "{A4622AA4-F65B-4CC5-9F89-97F1C5844960}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChannelEngine.ConsoleApp", "ChannelEngine.ConsoleApp\ChannelEngine.ConsoleApp.csproj", "{A4622AA4-F65B-4CC5-9F89-97F1C5844960}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelEngine.BusinessService", "ChannelEngine.BusinessService\ChannelEngine.BusinessService.csproj", "{98481FAF-4A62-4785-85FB-7F6F51CF6B1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChannelEngine.BusinessService", "ChannelEngine.BusinessService\ChannelEngine.BusinessService.csproj", "{98481FAF-4A62-4785-85FB-7F6F51CF6B1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelEngine.ServiceManager", "ChannelEngine.ServiceManager\ChannelEngine.ServiceManager.csproj", "{B71EA032-6CDC-47FC-8B59-F457FD7994D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChannelEngine.ServiceManager", "ChannelEngine.ServiceManager\ChannelEngine.ServiceManager.csproj", "{B71EA032-6CDC-47FC-8B59-F457FD7994D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelEngine.Shared", "ChannelEngine.Shared\ChannelEngine.Shared.csproj", "{61397710-6AF6-4B5C-99C2-10F6D7FE52E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChannelEngine.Shared", "ChannelEngine.Shared\ChannelEngine.Shared.csproj", "{61397710-6AF6-4B5C-99C2-10F6D7FE52E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelEngine.UnitTest", "ChannelEngine.UnitTest\ChannelEngine.UnitTest.csproj", "{96D7F8BA-EF10-48D1-9390-CF495111056E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelEngine.WebApplication", "ChannelEngine.WebApplication\ChannelEngine.WebApplication.csproj", "{75BAEC96-527F-4DCA-AB02-9A35F9E57BE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{61397710-6AF6-4B5C-99C2-10F6D7FE52E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61397710-6AF6-4B5C-99C2-10F6D7FE52E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61397710-6AF6-4B5C-99C2-10F6D7FE52E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96D7F8BA-EF10-48D1-9390-CF495111056E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96D7F8BA-EF10-48D1-9390-CF495111056E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96D7F8BA-EF10-48D1-9390-CF495111056E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96D7F8BA-EF10-48D1-9390-CF495111056E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75BAEC96-527F-4DCA-AB02-9A35F9E57BE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75BAEC96-527F-4DCA-AB02-9A35F9E57BE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75BAEC96-527F-4DCA-AB02-9A35F9E57BE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75BAEC96-527F-4DCA-AB02-9A35F9E57BE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

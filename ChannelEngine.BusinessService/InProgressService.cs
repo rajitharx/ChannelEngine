@@ -37,19 +37,50 @@ namespace ChannelEngine.BusinessService
             Response<IList<MerchantOrderResponse>> listOfMerchantOrderResponse =
                 GetAllOrdersByStatus(OrderStatusEnum.IN_PROGRESS);
 
-            if (listOfMerchantOrderResponse == null) 
+            if (listOfMerchantOrderResponse == null)
                 throw new ArgumentNullException(nameof(listOfMerchantOrderResponse));
 
             IList<MerchantOrderLineResponse> merchantOrderLineResponses =
                 GetTop5SellingProductFromMerchantOrderResponses(listOfMerchantOrderResponse.Content);
 
-            if (merchantOrderLineResponses == null) 
+            if (merchantOrderLineResponses == null)
                 throw new ArgumentNullException(nameof(merchantOrderLineResponses));
 
-            IList<InProgressOrders> inProgressOrders = 
+            IList<InProgressOrders> inProgressOrders =
                 GetInProgressOrdersProductDetails(merchantOrderLineResponses);
 
             return inProgressOrders ?? throw new ArgumentNullException(nameof(inProgressOrders));
+        }
+
+        public string UpdateProduct(string merchantProductNo, int stock)
+        {
+            string responseStr = string.Empty;
+            Response<IList<MerchantProductResponse>> listOfMerchantProductResponse =
+                GetProductDetailsBySearchKey(merchantProductNo);
+            if (listOfMerchantProductResponse.Content == null)
+                throw new ArgumentNullException(nameof(listOfMerchantProductResponse.Content));
+
+            MerchantProductRequest merchantProductRequest =
+                PopulateMerchantProductRequestByMerchantProductResponse(listOfMerchantProductResponse.Content[0]);
+            merchantProductRequest.Stock = stock;
+
+            IList<MerchantProductRequest> merchantProductRequests = new List<MerchantProductRequest>
+            {
+                merchantProductRequest
+            };
+
+            ApiResponse<ProductCreationResult> productCreationResult = _productService.UpsertProduct(merchantProductRequests);
+
+            if (productCreationResult.StatusCode == 200)
+            {
+                responseStr = string.Format("{0} updated successfully!", productCreationResult.Content.AcceptedCount);
+            }
+            else
+            {
+                responseStr = productCreationResult.Message;
+            }
+
+           return responseStr;
         }
 
         /// <summary>
@@ -87,7 +118,7 @@ namespace ChannelEngine.BusinessService
                 Response<IList<MerchantProductResponse>> response =
                     GetProductDetailsBySearchKey(merchantOrderLineResponse.MerchantProductNo);
 
-                if (response == null) throw new ArgumentNullException(nameof(response));
+                if (response.Content == null) throw new ArgumentNullException(nameof(response.Content));
 
                 InProgressOrders inProgressOrder = new InProgressOrders
                 {
@@ -126,6 +157,45 @@ namespace ChannelEngine.BusinessService
                 .OrderByDescending(x => x.Quantity).Take(5).ToList();
 
             return merchantOrderLineResponses;
+        }
+
+        private MerchantProductRequest PopulateMerchantProductRequestByMerchantProductResponse(MerchantProductResponse merchantProductResponse)
+        {
+            MerchantProductRequest merchantProductRequest = new MerchantProductRequest
+            {
+                ParentMerchantProductNo = String.Empty,
+                ParentMerchantProductNo2 = String.Empty,
+                ExtraData = merchantProductResponse.ExtraData,
+                Name = merchantProductResponse.Name,
+                Description = merchantProductResponse.Description,
+                Brand = merchantProductResponse.Brand,
+                Size = merchantProductResponse.Size,
+                Color = merchantProductResponse.Color,
+                Ean = merchantProductResponse.Ean,
+                ManufacturerProductNumber = merchantProductResponse.ManufacturerProductNumber,
+                MerchantProductNo = merchantProductResponse.MerchantProductNo,
+                Stock = merchantProductResponse.Stock,
+                Price = merchantProductResponse.Price,
+                MSRP = merchantProductResponse.MSRP,
+                PurchasePrice = merchantProductResponse.PurchasePrice,
+                VatRateType = merchantProductResponse.VatRateType,
+                ShippingCost = merchantProductResponse.ShippingCost,
+                ShippingTime = merchantProductResponse.ShippingTime,
+                Url = merchantProductResponse.Url,
+                ImageUrl = merchantProductResponse.ImageUrl,
+                ExtraImageUrl1 = merchantProductResponse.ExtraImageUrl1,
+                ExtraImageUrl2 = merchantProductResponse.ExtraImageUrl2,
+                ExtraImageUrl3 = merchantProductResponse.ExtraImageUrl3,
+                ExtraImageUrl4 = merchantProductResponse.ExtraImageUrl4,
+                ExtraImageUrl5 = merchantProductResponse.ExtraImageUrl5,
+                ExtraImageUrl6 = merchantProductResponse.ExtraImageUrl6,
+                ExtraImageUrl7 = merchantProductResponse.ExtraImageUrl7,
+                ExtraImageUrl8 = merchantProductResponse.ExtraImageUrl8,
+                ExtraImageUrl9 = merchantProductResponse.ExtraImageUrl9,
+                CategoryTrail = merchantProductResponse.CategoryTrail
+            };
+
+            return merchantProductRequest;
         }
     }
 }
