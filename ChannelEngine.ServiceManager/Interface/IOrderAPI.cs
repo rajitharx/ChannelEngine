@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ChannelEngine.Shared.Entity;
 
 namespace ChannelEngine.ServiceManager.Interface
 {
     public interface IOrderAPI
     {
-        int GetOrderByID(int id);
+        /// <summary>
+        /// GetOrderByStatusInProgress
+        /// </summary>
+        /// <returns>List of MerchantOrderResponse object</returns>
+        Response<IList<MerchantOrderResponse>> GetOrderByStatusInProgress();
     }
 }

@@ -1,0 +1,48 @@
+﻿@using ChannelEngine.Shared.Entity
+@model IEnumerable<InProgressOrders>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to ChannelEngine</h1>
+    <h2>Technical assignment for .Net Developer!</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("GTIN")
+                </th>
+                <th>
+                    @Html.DisplayName("Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Quantity")
+                </th>
+                <th>
+                    @Html.DisplayName("MerchantProductNo")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => b.GTIN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => b.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => b.Quantity)
+                    </td>
+                    <td>
+                        <a href="#" onclick="updateStock('@b.MerchantProductNo')" >@b.MerchantProductNo</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

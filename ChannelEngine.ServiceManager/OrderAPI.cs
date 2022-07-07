@@ -1,47 +1,74 @@
 ﻿using ChannelEngine.ServiceManager.Interface;
+using ChannelEngine.Shared.Entity;
+using ChannelEngine.Shared.Enumerations;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace ChannelEngine.ServiceManager
 {
-    public class OrderAPI : IOrderAPI
+    public class OrderAPI : BaseServiceManager, IOrderAPI
     {
-        HttpClient client = new HttpClient();
+        private HttpClient client = new HttpClient();
+        private string ordersAPIURL = string.Empty;
 
-        public int GetOrderByID(int id)
+        /// <summary>
+        /// Constructor for OrderAPI
+        /// </summary>
+        /// <param name="configuration"></param>
+        public OrderAPI(IConfiguration configuration) : base(configuration)
         {
-            GetOrderByParameter(ConstructOrderStatusRequest("IN_PROGRESS"));
-            return id + 11;
+            ordersAPIURL = string.Format("{0}{1}", apiURL, "orders");
         }
 
+        /// <summary>
+        /// GetOrderByStatusInProgress
+        /// </summary>
+        /// <returns>List of MerchantOrderResponse object</returns>
+        public Response<IList<MerchantOrderResponse>> GetOrderByStatusInProgress()
+        {
+            string? statusStr = Enum.GetName(typeof(OrderStatusEnum), OrderStatusEnum.IN_PROGRESS);
+            return GetOrderByParameter(ConstructOrderStatusRequest(statusStr))
+                .GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// ConstructOrderStatusRequest
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns>String URL</returns>
         private string ConstructOrderStatusRequest(string status)
         {
-            return $"statuses={status}";
+            return $"?statuses={status}";
         }
 
-        private async void GetOrderByParameter(string parameter)
+        /// <summary>
+        /// GetOrderByParameter
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns>List of MerchantOrderResponse</returns>
+        private async Task<Response<IList<MerchantOrderResponse>>> GetOrderByParameter(string parameter)
         {
-            /*
-             * For example: https://api-dev.channelengine.net/api/v2/orders/new?apikey=541b989ef78ccb1bad630ea5b85c6ebff9ca3322
-             */
-            string path = $"https://demo.channelengine.net/api/v2/orders?statuses=IN_PROGRESS&apikey=541b989ef78ccb1bad630ea5b85c6ebff9ca3322";
+            Response<IList<MerchantOrderResponse>> responseObject = new Response<IList<MerchantOrderResponse>>();
 
+            string path = ordersAPIURL + $"{parameter}&apikey={apiKey}";
 
             try
             {
                 HttpResponseMessage response = await client.GetAsync(path);
+                response.EnsureSuccessStatusCode();
+
                 if (response.IsSuccessStatusCode)
                 {
-                    //  product = await response.Content.ReadAsAsync<Product>();
+                    var jsonString = await response.Content.ReadAsStringAsync();
+                    responseObject = JsonConvert.DeserializeObject<Response<IList<MerchantOrderResponse>>>(jsonString);
                 }
             }
             catch (Exception ex)
             {
-
                 throw;
             }
 
-            // Deserialize the updated product from the response body.
-           // product = await response.Content.ReadAsAsync<Product>();
-           // return product;
+            return responseObject;
         }
     }
 }
