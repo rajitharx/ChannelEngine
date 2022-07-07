@@ -39,38 +39,10 @@
                         @Html.DisplayFor(modelItem => b.Quantity)
                     </td>
                     <td>
-                        @*@Html.ActionLink(b.MerchantProductNo, "UpdateStockUsingMerchantProductNo", "Home", new { merchantProductNo = b.MerchantProductNo })*@
-                        @*@Html.ActionLink("talks", "ClientTalks", "Talk", new { @class="talklink"})*@
-                        <a href="#" onclick="test('@b.MerchantProductNo')" >@b.MerchantProductNo</a>
+                        <a href="#" onclick="updateStock('@b.MerchantProductNo')" >@b.MerchantProductNo</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
-
-<script>
-
-
-    function test(id){
-        $.ajax(  
-        {  
-            type: 'POST',  
-            dataType: 'JSON',  
-            url: '/Home/UpdateStockUsingMerchantProductNo',  
-            data: { merchantProductNo: id },  
-            success:  
-                function (response)  
-                {
-                    alert(response.message);
-                },  
-            error:  
-                function (response)  
-                {  
-                    alert("An error occurred while updating record!")
-                }  
-        }); 
-    }
-
-
-</script>

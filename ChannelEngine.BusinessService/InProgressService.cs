@@ -52,6 +52,13 @@ namespace ChannelEngine.BusinessService
             return inProgressOrders ?? throw new ArgumentNullException(nameof(inProgressOrders));
         }
 
+        /// <summary>
+        /// UpdateProduct
+        /// </summary>
+        /// <param name="merchantProductNo">string merchantProductNo</param>
+        /// <param name="stock">int stock</param>
+        /// <returns>string message</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public string UpdateProduct(string merchantProductNo, int stock)
         {
             string responseStr = string.Empty;
@@ -80,7 +87,7 @@ namespace ChannelEngine.BusinessService
                 responseStr = productCreationResult.Message;
             }
 
-           return responseStr;
+            return responseStr;
         }
 
         /// <summary>
@@ -104,7 +111,7 @@ namespace ChannelEngine.BusinessService
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="merchantOrderLineResponses"></param>
         /// <returns></returns>
@@ -159,6 +166,11 @@ namespace ChannelEngine.BusinessService
             return merchantOrderLineResponses;
         }
 
+        /// <summary>
+        /// PopulateMerchantProductRequestByMerchantProductResponse
+        /// </summary>
+        /// <param name="merchantProductResponse">MerchantProductResponse object</param>
+        /// <returns>MerchantProductRequest object</returns>
         private MerchantProductRequest PopulateMerchantProductRequestByMerchantProductResponse(MerchantProductResponse merchantProductResponse)
         {
             MerchantProductRequest merchantProductRequest = new MerchantProductRequest

@@ -8,13 +8,22 @@ namespace ChannelEngine.ServiceManager
 {
     public class OrderAPI : BaseServiceManager, IOrderAPI
     {
-        HttpClient client = new HttpClient();
+        private HttpClient client = new HttpClient();
         private string ordersAPIURL = string.Empty;
+
+        /// <summary>
+        /// Constructor for OrderAPI
+        /// </summary>
+        /// <param name="configuration"></param>
         public OrderAPI(IConfiguration configuration) : base(configuration)
         {
             ordersAPIURL = string.Format("{0}{1}", apiURL, "orders");
         }
 
+        /// <summary>
+        /// GetOrderByStatusInProgress
+        /// </summary>
+        /// <returns>List of MerchantOrderResponse object</returns>
         public Response<IList<MerchantOrderResponse>> GetOrderByStatusInProgress()
         {
             string? statusStr = Enum.GetName(typeof(OrderStatusEnum), OrderStatusEnum.IN_PROGRESS);
@@ -22,17 +31,27 @@ namespace ChannelEngine.ServiceManager
                 .GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// ConstructOrderStatusRequest
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns>String URL</returns>
         private string ConstructOrderStatusRequest(string status)
         {
             return $"?statuses={status}";
         }
 
+        /// <summary>
+        /// GetOrderByParameter
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns>List of MerchantOrderResponse</returns>
         private async Task<Response<IList<MerchantOrderResponse>>> GetOrderByParameter(string parameter)
         {
             Response<IList<MerchantOrderResponse>> responseObject = new Response<IList<MerchantOrderResponse>>();
 
-            string path = ordersAPIURL+ $"{parameter}&apikey={apiKey}";
-            
+            string path = ordersAPIURL + $"{parameter}&apikey={apiKey}";
+
             try
             {
                 HttpResponseMessage response = await client.GetAsync(path);
@@ -46,7 +65,6 @@ namespace ChannelEngine.ServiceManager
             }
             catch (Exception ex)
             {
-
                 throw;
             }
 

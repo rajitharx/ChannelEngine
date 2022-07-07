@@ -20,11 +20,21 @@ namespace ChannelEngine.BusinessService
             _productAPI = productAPI;
         }
 
+        /// <summary>
+        /// GetProductDetailsBySearchKey
+        /// </summary>
+        /// <param name="searchKey">string searchKey</param>
+        /// <returns>List of MerchantProductResponse</returns>
         public Response<IList<MerchantProductResponse>> GetProductDetailsBySearchKey(string searchKey)
         {
             return _productAPI.GetProductDetailsByFromAPI(searchKey);
         }
 
+        /// <summary>
+        /// UpsertProduct
+        /// </summary>
+        /// <param name="merchantProductRequests">List of MerchantProductRequest</param>
+        /// <returns>ProductCreationResult object</returns>
         public ApiResponse<ProductCreationResult> UpsertProduct(IList<MerchantProductRequest> merchantProductRequests)
         {
             return _productAPI.UpsertProductUsing(merchantProductRequests);

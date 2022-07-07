@@ -8,23 +8,43 @@ namespace ChannelEngine.ServiceManager
 {
     public class ProductAPI : BaseServiceManager, IProductAPI
     {
-        HttpClient client = new HttpClient();
+        private HttpClient client = new HttpClient();
         private string productAPIURL = string.Empty;
+
+        /// <summary>
+        /// Constructor for ProductAPI
+        /// </summary>
+        /// <param name="configuration"></param>
         public ProductAPI(IConfiguration configuration) : base(configuration)
         {
             productAPIURL = string.Format("{0}{1}", apiURL, "products");
         }
 
+        /// <summary>
+        /// GetProductDetailsByFromAPI
+        /// </summary>
+        /// <param name="serachKey">String serachKey</param>
+        /// <returns>List of MerchantProductResponse</returns>
         public Response<IList<MerchantProductResponse>> GetProductDetailsByFromAPI(string serachKey)
         {
             return GetProductBySearchKey(serachKey).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// UpsertProductUsing
+        /// </summary>
+        /// <param name="merchantProductRequests">List of MerchantProductRequest</param>
+        /// <returns>ApiResponse</returns>
         public ApiResponse<ProductCreationResult> UpsertProductUsing(IList<MerchantProductRequest> merchantProductRequests)
         {
             return UpsertProduct(merchantProductRequests).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// UpsertProduct
+        /// </summary>
+        /// <param name="merchantProductRequests"></param>
+        /// <returns>Response ProductCreationResult</returns>
         private async Task<ApiResponse<ProductCreationResult>> UpsertProduct(IList<MerchantProductRequest> merchantProductRequests)
         {
             ApiResponse<ProductCreationResult> apiResponse = new ApiResponse<ProductCreationResult>();
@@ -43,6 +63,11 @@ namespace ChannelEngine.ServiceManager
             return apiResponse;
         }
 
+        /// <summary>
+        /// GetProductBySearchKey
+        /// </summary>
+        /// <param name="searchKey">string searchKey</param>
+        /// <returns>MerchantProductResponse object</returns>
         private async Task<Response<IList<MerchantProductResponse>>> GetProductBySearchKey(string searchKey)
         {
             Response<IList<MerchantProductResponse>> responseObject = new Response<IList<MerchantProductResponse>>();
@@ -67,6 +92,5 @@ namespace ChannelEngine.ServiceManager
 
             return responseObject;
         }
-
     }
 }
